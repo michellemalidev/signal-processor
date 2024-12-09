@@ -1,17 +1,43 @@
 import numpy as np
 from scipy.signal import butter, filtfilt
+import os
 
 class EKGProcessor:
     def __init__(self, sampling_rate):
         self.sampling_rate = sampling_rate
 
     def load_data(self, file_path):
-        """Load EKG data from a CSV file."""
+        """Load EKG data from a CSV file.
+        
+        Args:
+            file_path (str): Path to the CSV file containing EKG data
+            
+        Returns:
+            numpy.ndarray: Loaded EKG data if successful, None otherwise
+            
+        Raises:
+            FileNotFoundError: If the specified file doesn't exist
+            ValueError: If the file is empty or contains invalid data
+        """
         try:
+            if not os.path.exists(file_path):
+                raise FileNotFoundError(f"File not found: {file_path}")
+                
             data = np.loadtxt(file_path, delimiter=',')
+            
+            if data.size == 0:
+                raise ValueError("File is empty")
+                
             return data
+            
+        except FileNotFoundError as e:
+            print(f"File error: {e}")
+            return None
+        except ValueError as e:
+            print(f"Data error: Invalid or empty data in file - {e}")
+            return None
         except Exception as e:
-            print(f"Error loading data: {e}")
+            print(f"Unexpected error while loading data: {e}")
             return None
 
     def apply_bandpass_filter(self, signal, lowcut=0.5, highcut=50.0, order=2):
