@@ -5,7 +5,7 @@ import numpy as np
 def main():
     # Configuration
     sampling_rate = 250  # Hz
-    file_path = 'data/ekg_signal.csv'
+    file_path = 'data/ekg_graph.csv'
 
     # Initialize processors
     processor = EKGProcessor(sampling_rate)
