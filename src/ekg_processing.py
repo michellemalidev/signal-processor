@@ -6,6 +6,32 @@ class EKGProcessor:
     def __init__(self, sampling_rate):
         self.sampling_rate = sampling_rate
 
+    def validate_data(self, data):
+        """Validate the EKG data.
+        
+        Args:
+            data (numpy.ndarray): EKG data to validate
+            
+        Returns:
+            bool: True if data is valid, False otherwise
+        """
+        if data is None:
+            print("Validation error: Data is None")
+            return False
+        if not isinstance(data, np.ndarray):
+            print("Validation error: Data is not a numpy array")
+            return False
+        if data.ndim != 1:
+            print("Validation error: Data is not one-dimensional")
+            return False
+        if np.any(np.isnan(data)):
+            print("Validation error: Data contains NaN values")
+            return False
+        if np.any(np.isinf(data)):
+            print("Validation error: Data contains infinite values")
+            return False
+        return True
+
     def load_data(self, file_path):
         """Load EKG data from a CSV file.
         
@@ -24,6 +50,9 @@ class EKGProcessor:
                 raise FileNotFoundError(f"File not found: {file_path}")
                 
             data = np.loadtxt(file_path, delimiter=',')
+            
+            if not self.validate_data(data):
+                return None
             
             if data.size == 0:
                 raise ValueError("File is empty")
