@@ -10,7 +10,7 @@ class HeartRateCalculator:
         """Detect R-peaks in the EKG signal."""
         # Find peaks with minimum height and distance
         peaks, _ = find_peaks(signal, 
-                            height=0.5,  # Adjust threshold as needed
+                            height=0.25,  # Adjust threshold as needed
                             distance=self.sampling_rate * 0.5)  # Minimum 0.5s between peaks
         return peaks
 
